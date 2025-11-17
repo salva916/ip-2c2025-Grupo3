@@ -1,3 +1,27 @@
+phase = "idle"      # idle, partitioning, pushing
+low = 0             # Inicio del rango actual
+high = 0            # Fin del rango actual
+def init(vals):
+    global items, length, stack, i, j, pivot, phase, low, high
+    items = list(vals)
+    length = len(items)
+    stack = []
+    if length > 1:
+        stack.append((0, length - 1))  # Primer rango
+    phase = "idle"
+    i = 0
+    j = 0
+    pivot = None
+    low = 0
+    high = 0
+def step():
+    global items, length, stack, i, j, pivot, phase, low, high
+    # Si no hay rangos pendientes y estamos en idle, terminamos
+    if not stack and phase == "idle":
+        return {"done": True}
+    # Inicializar rango si estamos en idle
+    if phase == "idle":
+        if not stack:
             return {"done": True}
         low, high = stack.pop()
         if low >= high:
@@ -7,7 +31,7 @@
         i = low - 1
         j = low
         phase = "partitioning"
-    # Fase de partición: paso a paso
+ # Fase de partición: paso a paso
     if phase == "partitioning":
         if j <= high - 1:
             swap = False
